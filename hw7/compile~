@@ -1,5 +1,4 @@
 #!/bin/sh
-
 set -e    # halt on first error
 
 link=all  # link all binaries by default
@@ -16,11 +15,11 @@ CIILIBS=`pkg-config --libs cii40`
 
 # compile and link against course software and netpbm library
 CFLAGS="-I. -I/comp/40/include $CIIFLAGS"
-LIBS="$CIILIBS -lnetpbm -lm -lbitpack" $LIBS 
+LIBS="-lcii40-O1 $CIILIBS " $LIBS
 LFLAGS="-L/comp/40/lib64" 
 
 # these flags max out warnings and debug info
-FLAGS="-g -O0 -Wall -Wextra -Werror -Wfatal-errors -std=c99 -pedantic"
+FLAGS="-g -O1 -Wall -Wextra -Werror -Wfatal-errors -std=c99 -pedantic"
 
 rm -f *.o  # make sure no object files are left hanging around
 

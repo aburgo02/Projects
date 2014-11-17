@@ -1,0 +1,18 @@
+model name : Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz
+
+Phase 1
+
+  Midmark - 3.765u, 
+  Sandmark - 93.420u, 
+  
+  Rel to start - 1
+  Rel to prev - 1
+  
+  Improvement - Starting point
+  
+Phase 2
+
+  Midmark - 3.288u
+  Sandmark - 82.033u
+  
+  Improvement - Deleted unnecessary variable storage in unused registers. Decoder store_regs
