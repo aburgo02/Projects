@@ -1,0 +1,139 @@
+
+
+Skip to content
+Using Gmail with screen readers
+Available	kimberly hardy
+Available	Matt Roy
+Available	Rob Fusco
+Idle	Jacob Pakula
+Idle	Micah Agnoli
+Idle	Todd Fritz
+Idle	William Ross
+Offline	Ashwin Chak
+Offline	Jared Young
+Offline	Ryan Grandeau
+6 of 8,934
+ 
+Web Clip
+CNN.com Recently Published/Updated - Investors want in on China's tech scene - 3 hours ago
+um files!
+Inbox
+	x
+Lucy Qin <lucyzqin@gmail.com>
+	
+Attachments11:03 PM (11 hours ago)
+		
+to me
+13 Attachments
+Preview attachment um.c
+[C]
+7.4 KB
+Preview attachment sandmark.umz
+[Binary File]
+Preview attachment midmark.um
+[Binary File]
+Preview attachment managemem.h
+[C]
+Preview attachment managemem.c
+[C]
+Preview attachment io.h
+[C]
+Preview attachment io.c
+[C]
+Preview attachment decoder.h
+[C]
+Preview attachment decoder.c
+[C]
+Preview attachment compile
+[Binary File]
+Preview attachment bitpack.c
+[C]
+Preview attachment alu.h
+[C]
+Preview attachment alu.c
+[C]
+	
+Click here to Reply or Forward
+0.7 GB (4%) of 15 GB used
+Manage
+©2014 Google - Terms & Privacy
+Last account activity: 41 minutes ago
+Details
+	
+	
+Lucy Qin's profile photo
+	Lucy Qin
+Show details
+Conversation opened. 1 read message.
+managemem.h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                   *
+ *                           managemem                               *
+ *                                                                   *
+ *                File: managemem.c                                  *
+ *             Authors: Andrew Burgos and Lucy Qin                   *
+ *       Date Modified: November 13, 2014                            *
+ *             Purpose: Header file for the managemem module,        *
+ *                      which is responsible for maintaining the     *
+ *                      segmented memory as well as handling UM      *
+ *                      executions and other functions               *
+ *                      that access the memory                       *
+ *                                                                   *
+ *                                                                   *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * *
+ *   D I R E C T I V E S   *
+ * * * * * * * * * * * * * */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+#include "uarray.h"
+#include "seq.h"
+#include "assert.h"
+#include "bitpack.h"
+
+
+typedef uint32_t Um_instruction;
+typedef uint32_t *word;
+typedef uint32_t Um_segmentID;
+
+typedef struct Memory *Memory;
+
+
+// TODO: MOVE THIS STRUCTURE DECLARATION
+
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * *
+ *   F U N C T I O N   D E C L A R A T I O N S   *
+ * * * * * * * * * * * * * * * * * * * * * * * * */
+
+extern Memory initialize_memory();
+
+extern Um_instruction fetch_instruction(uint32_t *program_counter, Memory mem);
+
+
+/*   U M   I N S T R U C T I O N S   */
+
+extern void segmented_load  (unsigned ra, unsigned rb, unsigned rc, 
+                             UArray_T registers, Memory mem);
+
+extern void segmented_store (unsigned ra, unsigned rb, unsigned rc, 
+                             UArray_T registers, Memory mem);
+
+extern void map_segment     (unsigned ra, unsigned rb, 
+                             UArray_T registers, Memory mem);
+
+extern void unmap_segment   (unsigned ra, UArray_T registers, Memory mem);
+
+extern void load_program    (unsigned ra, unsigned rb, UArray_T registers, 
+                             Memory mem, uint32_t *program_counter);
+
+extern void free_memory     (Memory mem);
+
+Saving to Drive - Move to:
+Displaying managemem.h.
