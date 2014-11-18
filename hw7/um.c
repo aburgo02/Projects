@@ -30,6 +30,12 @@
 #define B (codeword >> 3) & 7
 #define A (codeword >> 6) & 7
 
+
+struct Memory {
+        Seq_T segments;
+        Seq_T unused_ids;
+};
+
 /* * * * * * * * * * * * * * * * * * * * * * * * *
  *   F U N C T I O N   D E C L A R A T I O N S   *
  * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -49,6 +55,8 @@ static void free_um_memory(UArray_T registers, Memory mem);
  *   I M P L E M E N T A T I O N   *
  * * * * * * * * * * * * * * * * * */
 
+
+
 int main(int argc, char *argv[]) 
 {
         /* initialize segmented memory */
@@ -66,7 +74,10 @@ int main(int argc, char *argv[])
 //        initialize_registers(registers);
 
         /* load in 32-bit instructions */
-        Um_instruction codeword = (fetch_instruction(program_counter, mem));  
+	
+	UArray_T segment_zero = Seq_get(mem->segments, 0);
+	 
+        Um_instruction codeword =  *((Um_instruction*)UArray_at(segment_zero,*program_counter));
  //       instruction decoded = malloc(sizeof(*decoded));
 	
 	unsigned opcode = 0;
@@ -98,7 +109,7 @@ int main(int argc, char *argv[])
 	    ra = (codeword >> 6) & 7;
 	  }*/
 	    
-	 
+	
 	  
 	  
           switch ( opcode ) {
@@ -160,13 +171,12 @@ int main(int argc, char *argv[])
 	
 
             //   execute_instruction(decoded, registers, mem, program_counter);
-                codeword = (fetch_instruction(program_counter, mem));
+                codeword = *((Um_instruction*)UArray_at(segment_zero,*program_counter));
               
               
    //             decode(codeword, decoded);
-	}    
-		  
-//        free(decoded);
+      }    
+  
         free_um_memory(registers, mem);
    
         

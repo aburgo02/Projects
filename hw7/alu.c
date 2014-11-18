@@ -1,10 +1,12 @@
 #include "alu.h"
 
 
+
 extern void cond_move(unsigned ra, unsigned rb, unsigned rc, UArray_T registers)
 {
         uint32_t *reg_a = (uint32_t*)UArray_at(registers, ra);
         uint32_t *reg_b = (uint32_t*)UArray_at(registers, rb);
+	
         uint32_t *reg_c = (uint32_t*)UArray_at(registers, rc);
         
         if ( *reg_c != 0 ) {
