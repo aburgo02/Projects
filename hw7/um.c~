@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
         
         /* create registers */
         UArray_T registers = UArray_new(8, sizeof(uint32_t));  
-    //    uint32_t $r[8];
+        uint32_t $r[8];
         /* initialize program counter */
         uint32_t pc_value = 0;
         uint32_t *program_counter = &pc_value;
@@ -103,9 +103,9 @@ int main(int argc, char *argv[])
 	  
           switch ( opcode ) {
                 case 0:
-		//  printf("in case 0");
-			//if ($r[C]) {$r[A] = $r[B];}
-                        cond_move(A,B,C, registers);
+		  printf("in case 0");
+			if ($r[C]) {$r[A] = $r[B];}
+                        //cond_move(A,B,C, registers);
                         break;
                 case 1:
                         segmented_load(A, B, C,

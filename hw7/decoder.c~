@@ -49,15 +49,10 @@ static void store_regs(uint32_t codeword, instruction decoded)
 {
         
         if ( decoded->opcode == HALT ) {
-         /*       
-                decoded->ra = -1;
-                decoded->rb = -1;
-                decoded->rc = -1;
-        */
+       
         } else if ( decoded->opcode == MAPSEG || 
                     decoded->opcode == LOADPROG ) {
                 /* instructions using two registers */
-          //      decoded->ra = -1;
                 decoded->rb = Bitpack_getu(codeword, 3, 3);
                 decoded->rc = Bitpack_getu(codeword, 3, 0);
                 check_registers(decoded, 2);
@@ -67,8 +62,6 @@ static void store_regs(uint32_t codeword, instruction decoded)
                    decoded->opcode == OUT ) {
                 
                 /* instructions using 1 register */
-             //   decoded->ra = -1;
-              //  decoded->rb = -1;
                 decoded->rc = Bitpack_getu(codeword, 3, 0);
         
                 check_registers(decoded, 1);

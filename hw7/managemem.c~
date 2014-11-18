@@ -1,71 +1,3 @@
-
-
-Skip to content
-Using Gmail with screen readers
-Available	kimberly hardy
-Available	Matt Roy
-Available	Rob Fusco
-Idle	Jacob Pakula
-Idle	Micah Agnoli
-Idle	Todd Fritz
-Idle	William Ross
-Offline	Ashwin Chak
-Offline	Jared Young
-Offline	Ryan Grandeau
-6 of 8,934
-Web Clip
-CNN.com Recently Published/Updated - Investors want in on China's tech scene - 3 hours ago
-um files!
-Inbox
-	x
-Lucy Qin <lucyzqin@gmail.com>
-	
-Attachments11:03 PM (11 hours ago)
-		
-to me
-13 Attachments
-Preview attachment um.c
-[C]
-7.4 KB
-Preview attachment sandmark.umz
-[Binary File]
-Preview attachment midmark.um
-[Binary File]
-Preview attachment managemem.h
-[C]
-Preview attachment managemem.c
-[C]
-Preview attachment io.h
-[C]
-Preview attachment io.c
-[C]
-Preview attachment decoder.h
-[C]
-Preview attachment decoder.c
-[C]
-Preview attachment compile
-[Binary File]
-Preview attachment bitpack.c
-[C]
-Preview attachment alu.h
-[C]
-Preview attachment alu.c
-[C]
-	
-Click here to Reply or Forward
-0.7 GB (4%) of 15 GB used
-Manage
-©2014 Google - Terms & Privacy
-Last account activity: 41 minutes ago
-Details
-	
-	
-Lucy Qin's profile photo
-	Lucy Qin
-Show details
-Conversation opened. 1 read message.
-managemem.c
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                   *
  *                           managemem                               *
@@ -98,13 +30,14 @@ struct Memory {
 
 
 
-const unsigned INITAL_SEQUENCE_SIZE = 100;
+const unsigned INITAL_SEQUENCE_SIZE = 150;
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * *
  *   F U N C T I O N   D E C L A R A T I O N   *
  * * * * * * * * * * * * * * * * * * * * * * * */
 
-static void initialize_segment(UArray_T segment); 
+//static void initialize_segment(UArray_T segment); 
 static UArray_T copy_segment(UArray_T copied_segment, UArray_T segment_zero);
 static void addSequenceIndices(Memory mem, Um_segmentID nextID);
 
@@ -182,7 +115,8 @@ extern void segmented_store(unsigned ra, unsigned rb, unsigned rc,
 {
         word register_a = UArray_at(registers, ra); // segment ID
         word register_b = UArray_at(registers, rb); // offset 
-        word register_c = UArray_at(registers, rc); // value     
+        word register_c = UArray_at(registers, rc); // value  
+	fprintf(stderr, "reg a holds: %u\n", *register_a);
               
         assert(*register_a < (unsigned)Seq_length(mem->segments)); 
                
@@ -213,7 +147,7 @@ extern void map_segment(unsigned rb, unsigned rc,
         }       
         curr_ID = (Um_segmentID)(uintptr_t)Seq_remlo(mem->unused_ids);
         
-        initialize_segment(new_segment);
+//       initialize_segment(new_segment);
      
         Seq_put(mem->segments, curr_ID, new_segment);
       
@@ -223,7 +157,8 @@ extern void map_segment(unsigned rb, unsigned rc,
         
        
 }
-/* initializes segment to hold words containing 0 */
+
+/* initializes segment to hold words containing 0 
 static void initialize_segment(UArray_T segment) 
 {
         uint32_t i;
@@ -232,7 +167,7 @@ static void initialize_segment(UArray_T segment)
                 *value = 0;      
         }
 }
-
+*/
 /* Frees segmented memory associated with segID at register ra, then stores 
  * segID for later use 
  */
@@ -320,5 +255,3 @@ extern void free_memory(Memory mem) {
         free(mem);
 }
 
-Saving to Drive - Move to:
-Displaying managemem.h.

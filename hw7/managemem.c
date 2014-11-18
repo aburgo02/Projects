@@ -30,13 +30,14 @@ struct Memory {
 
 
 
-const unsigned INITAL_SEQUENCE_SIZE = 100;
+const unsigned INITAL_SEQUENCE_SIZE = 150;
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * *
  *   F U N C T I O N   D E C L A R A T I O N   *
  * * * * * * * * * * * * * * * * * * * * * * * */
 
-static void initialize_segment(UArray_T segment); 
+//static void initialize_segment(UArray_T segment); 
 static UArray_T copy_segment(UArray_T copied_segment, UArray_T segment_zero);
 static void addSequenceIndices(Memory mem, Um_segmentID nextID);
 
@@ -114,7 +115,8 @@ extern void segmented_store(unsigned ra, unsigned rb, unsigned rc,
 {
         word register_a = UArray_at(registers, ra); // segment ID
         word register_b = UArray_at(registers, rb); // offset 
-        word register_c = UArray_at(registers, rc); // value     
+        word register_c = UArray_at(registers, rc); // value  
+//	fprintf(stderr, "reg a holds: %u\n", *register_a);
               
         assert(*register_a < (unsigned)Seq_length(mem->segments)); 
                
@@ -145,7 +147,7 @@ extern void map_segment(unsigned rb, unsigned rc,
         }       
         curr_ID = (Um_segmentID)(uintptr_t)Seq_remlo(mem->unused_ids);
         
-        initialize_segment(new_segment);
+//       initialize_segment(new_segment);
      
         Seq_put(mem->segments, curr_ID, new_segment);
       
@@ -155,7 +157,8 @@ extern void map_segment(unsigned rb, unsigned rc,
         
        
 }
-/* initializes segment to hold words containing 0 */
+
+/* initializes segment to hold words containing 0 
 static void initialize_segment(UArray_T segment) 
 {
         uint32_t i;
@@ -164,7 +167,7 @@ static void initialize_segment(UArray_T segment)
                 *value = 0;      
         }
 }
-
+*/
 /* Frees segmented memory associated with segID at register ra, then stores 
  * segID for later use 
  */

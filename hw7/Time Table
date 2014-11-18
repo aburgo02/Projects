@@ -16,3 +16,17 @@ Phase 2
   Sandmark - 82.033u
   
   Improvement - Deleted unnecessary variable storage in unused registers. Decoder store_regs
+  
+Phase 3
+
+  Midmark - 3.244u
+  Sandmark - 80.608u
+  
+  Improvement - In memory initialization we allocate more sequences. Managemem.c addseqeuences
+  
+Phase 4
+
+  Midmark - 
+  Sandmark -
+  
+  Improvement - Changes to register representation and more reliant on bit shifting
