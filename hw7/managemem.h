@@ -62,6 +62,6 @@ extern void map_segment     (unsigned ra, unsigned rb,
 extern void unmap_segment   (unsigned ra, UArray_T registers, Memory mem);
 
 extern void load_program    (unsigned ra, unsigned rb, UArray_T registers, 
-                             Memory mem, uint32_t *program_counter);
+                             Memory mem, uint32_t *program_counter); 
 
 extern void free_memory     (Memory mem);
