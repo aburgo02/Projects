@@ -69,6 +69,8 @@ int main(int argc, char *argv[])
         uint32_t pc_value = 0;
         uint32_t *program_counter = &pc_value;
         
+    
+        
         read_file(argc, argv, registers, mem);
 
 //        initialize_registers(registers);
@@ -77,7 +79,7 @@ int main(int argc, char *argv[])
 	
 	UArray_T segment_zero = Seq_get(mem->segments, 0);
 	 
-        Um_instruction codeword =  *((Um_instruction*)UArray_at(segment_zero,*program_counter));
+        Um_instruction codeword = *((Um_instruction*)UArray_at(segment_zero,*program_counter));
  //       instruction decoded = malloc(sizeof(*decoded));
 	
 	unsigned opcode = 0;
@@ -87,13 +89,13 @@ int main(int argc, char *argv[])
 
 
         while ( opcode != HALT) {
-//	  decode(codeword, decoded);
+	 
+	 //((Um_instruction*)program_counter = UArray_at(segment, *program_counter); 
+//	 decode(codeword, decoded);
 //	  fprintf(stderr, "opcode is: %u\n", opcode);
 //	  fprintf(stderr, "orig rb is: %u\n", rb);
-	  unsigned raval;
-//	  unsigned rb;
-//	  unsigned rc;
-	  unsigned value;
+//	  uint32_t *program_counter = UArray_at(segment, pc_value);
+	  unsigned raval, value;
 	  opcode = (codeword >> 28) & 15;
 	  if(opcode == 13){
 	   value = codeword & 33554431;
@@ -171,7 +173,7 @@ int main(int argc, char *argv[])
 	
 
             //   execute_instruction(decoded, registers, mem, program_counter);
-                codeword = *((Um_instruction*)UArray_at(segment_zero,*program_counter))
+        codeword = *((Um_instruction*)UArray_at(segment_zero,*program_counter));
               
               
    //             decode(codeword, decoded);
@@ -206,13 +208,11 @@ static void read_file(int argc, char *argv[], UArray_T registers, Memory mem)
 
         struct stat file_stats;
 
-        if(stat(argv[1], &file_stats) == -1) {
+        if(stat(argv[1], &file_stats) == -1 && file_stats.st_size % 4 != 0) {
                 fprintf(stderr, "Error within file\n");
-                exit(EXIT_FAILURE);
-                fclose(file_ptr);
-                free_um_memory(registers, mem);
+		exit(EXIT_FAILURE);
         }
-        
+        /*
         if (file_stats.st_size % 4 != 0) {
                 fprintf(stderr, "Error: File does not contain");
                 fprintf(stderr, "correctly formatted instruction\n");
@@ -221,6 +221,7 @@ static void read_file(int argc, char *argv[], UArray_T registers, Memory mem)
                 free_um_memory(registers, mem);
                 
         }
+        */
         load_value(0, (file_stats.st_size / 4), registers);
         map_segment(1, 0, registers, mem);
 
@@ -229,7 +230,7 @@ static void read_file(int argc, char *argv[], UArray_T registers, Memory mem)
         int instruction_count = 0;
         unsigned lsb = 32;
 
-        while((instruct_byte = getc(file_ptr)) != (unsigned)EOF) {
+        while((instruct_byte = getc(file_ptr))!= (unsigned)EOF) {
            
                 lsb = lsb - 8;
                 instruct = Bitpack_newu(instruct, 8, lsb, instruct_byte);
@@ -249,67 +250,21 @@ static void read_file(int argc, char *argv[], UArray_T registers, Memory mem)
 static void free_um_memory(UArray_T registers, Memory mem) 
 {
         UArray_free(&registers);
-        free_memory(mem);
+        int i;
+        UArray_T segment;
+	int length = Seq_length(mem->segments);
+	
+        for (i = 0; i < length; i++) {
+                if ((segment = Seq_get(mem->segments, i)) != NULL) { 
+                        UArray_free(&segment);
+                }
+        }
+        
+
+        
+        Seq_free(&(mem->segments));
+        Seq_free(&(mem->unused_ids));
+        
+        free(mem);
 }
 
-/* Executes UM instruction based off decoded opcode 
-static void execute_instruction(instruction decoded, UArray_T registers, 
-                                Memory mem, uint32_t *program_counter) 
-{
-        switch ( opcode ) {
-                case 0:
-                        cond_move(ra, rb, rc, 
-                                  registers);
-                        break;
-                case 1:
-                        segmented_load(ra, rb, rc,
-                                       registers, mem);
-                        break;
-                case 2: 
-                        segmented_store(ra, rb, rc,
-                                        registers, mem);
-                        break;
-                case 3:
-                        addition(ra, rb, rc, 
-                                 registers);
-                        break;
-                case 4:
-                        multiply(ra, rb, rc, 
-                                 registers);
-                        break;
-                case 5: 
-                        division(ra, rb, rc,
-                                 registers);
-                        break;
-                case 6: 
-                        nand(ra, rb, rc, registers);
-                        break;
-                case 7: 
-                        return;
-                case 8: 
-                        map_segment(rb, rc, registers, mem);
-                        break;
-                case 9: 
-                        unmap_segment(rc, registers, mem);
-                        break;
-                case 10: 
-                        output(rc, registers);
-                        break;
-                case 11: 
-                        input(rc, registers);
-                        break;
-                case 12: 
-                        load_program(rb, rc, registers, 
-                                     mem, program_counter); 
-                        break;
-                case 13: 
-                        load_value(ra, value, registers);
-                        break;
-        }
-        
-        if (opcode != 12) {
-                *program_counter = *program_counter + 1;
-        
-        }
-}
-*/
