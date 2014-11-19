@@ -112,15 +112,18 @@ int main(int argc, char *argv[])
 	  }*/
 	    
 	
-	  
+	
 	  
           switch ( opcode ) {
                 case 0:
 		//  printf("in case 0");
 			//if ($r[C]) {$r[A] = $r[B];}
+			  
                         cond_move(A,B,C, registers);
+			  
                         break;
                 case 1:
+		    
                         segmented_load(A, B, C,
                                        registers, mem);
                         break;
@@ -146,9 +149,11 @@ int main(int argc, char *argv[])
                 case 7: 
                         return 0;
                 case 8: 
+		 
                         map_segment(B, C, registers, mem);
                         break;
                 case 9: 
+		   
                         unmap_segment(C, registers, mem);
                         break;
                 case 10: 
@@ -167,7 +172,7 @@ int main(int argc, char *argv[])
         }
         
         if (opcode != 12) {
-                *program_counter = *program_counter + 1;
+                *program_counter = *program_counter +1;
         
         }
 	
@@ -208,7 +213,7 @@ static void read_file(int argc, char *argv[], UArray_T registers, Memory mem)
 
         struct stat file_stats;
 
-        if(stat(argv[1], &file_stats) == -1 && file_stats.st_size % 4 != 0) {
+        if(stat(argv[1], &file_stats) == -1 || file_stats.st_size % 4 != 0) {
                 fprintf(stderr, "Error within file\n");
 		exit(EXIT_FAILURE);
         }
@@ -230,7 +235,7 @@ static void read_file(int argc, char *argv[], UArray_T registers, Memory mem)
         int instruction_count = 0;
         unsigned lsb = 32;
 
-        while((instruct_byte = getc(file_ptr))!= (unsigned)EOF) {
+        while((instruct_byte = getc(file_ptr)) != (unsigned)EOF) {
            
                 lsb = lsb - 8;
                 instruct = Bitpack_newu(instruct, 8, lsb, instruct_byte);
@@ -250,15 +255,7 @@ static void read_file(int argc, char *argv[], UArray_T registers, Memory mem)
 static void free_um_memory(UArray_T registers, Memory mem) 
 {
         UArray_free(&registers);
-        int i;
-        UArray_T segment;
-	int length = Seq_length(mem->segments);
-	
-        for (i = 0; i < length; i++) {
-                if ((segment = Seq_get(mem->segments, i)) != NULL) { 
-                        UArray_free(&segment);
-                }
-        }
+        free_memory(mem);
         
 
         

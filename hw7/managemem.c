@@ -37,8 +37,8 @@ const unsigned INITAL_SEQUENCE_SIZE = 200;
  * * * * * * * * * * * * * * * * * * * * * * * */
 
 //static void initialize_segment(UArray_T segment); 
-static inline void copy_segment(UArray_T copied_segment, UArray_T segment_zero);
-static inline void addSequenceIndices(Memory mem, Um_segmentID nextID);
+static UArray_T copy_segment(UArray_T copied_segment, UArray_T segment_zero);
+static void addSequenceIndices(Memory mem, Um_segmentID nextID);
 
 
 /* * * * * * * * * * * * * * * * * * 
@@ -63,7 +63,7 @@ extern Memory initialize_memory() {
 /* Adds additional sequences once unused_id and segment sequences 
  * have been filled */
  
-static inline void addSequenceIndices(Memory mem, Um_segmentID nextID) {
+static void addSequenceIndices(Memory mem, Um_segmentID nextID) {
 
         unsigned i;     
         for ( i = 0; i < INITAL_SEQUENCE_SIZE; i++ ) {
@@ -103,9 +103,9 @@ extern void segmented_load(unsigned ra, unsigned rb, unsigned rc,
         
         assert(segment);        
 
-     //   word value = UArray_at(segment, *register_c);
+        word value = UArray_at(segment, *register_c);
         
-        *register_a = *(word)UArray_at(segment, *register_c); 
+        *register_a = *value; 
 }
 
 /* Stores value at register c into segmented memory */
@@ -123,9 +123,9 @@ extern void segmented_store(unsigned ra, unsigned rb, unsigned rc,
         
         assert(segment);
         assert(*register_b < (unsigned)UArray_length(segment));
-      //  word value = UArray_at(segment, *register_b);
+      word value = UArray_at(segment, *register_b);
         
-        *(word)UArray_at(segment, *register_b) = *register_c;  
+        *value = *register_c;  
 }
 
 /* Creates a new segment with a number of words equal to the value in register 
@@ -138,22 +138,29 @@ extern void map_segment(unsigned rb, unsigned rc,
         Um_segmentID curr_ID;
     
         UArray_T new_segment = UArray_new(*seg_length, sizeof(*seg_length));
-        assert(new_segment);        
-
+        assert(new_segment); 
+	
+	
+	if(Seq_length(mem->unused_ids) == 0) {
+	  Um_segmentID nextID = Seq_length(mem->segments);
+	  addSequenceIndices(mem, nextID);
+	}
+/*
         if( Seq_length(mem->unused_ids) == 0 ) {
                 curr_ID = Seq_length(mem->segments);
 		Seq_addhi(mem->segments, NULL);
 		Seq_put(mem->segments, curr_ID, new_segment);
-        }else {
+        }else {*/
         curr_ID = (Um_segmentID)(uintptr_t)Seq_remlo(mem->unused_ids);
         
 //       initialize_segment(new_segment);
      
         Seq_put(mem->segments, curr_ID, new_segment);
       
-	}       
-       // word rb_register = UArray_at(registers, rb);
-        *(word)UArray_at(registers, rb) = curr_ID;
+	       
+        word rb_register = UArray_at(registers, rb);
+       
+        *rb_register = curr_ID;
         
        
 }
@@ -184,7 +191,7 @@ extern void unmap_segment(unsigned rc, UArray_T registers, Memory mem)
 
         UArray_free(&removed_segment);
         
-       // Seq_put(mem->segments, segID, NULL);
+        Seq_put(mem->segments, segID, NULL);
 
         Seq_addlo(mem->unused_ids, (void *)(uintptr_t)segID);        
 }
@@ -208,28 +215,32 @@ extern void load_program(unsigned rb, unsigned rc, UArray_T registers,
         assert(copied_segment);
 	UArray_T segment_zero = Seq_get(mem->segments, 0);
         
-    /*
+    
         if ( segment_zero != NULL ) {
                 UArray_free(&segment_zero);
         }
-      */  
-       copy_segment(copied_segment, segment_zero);
+        
+       segment_zero = copy_segment(copied_segment, segment_zero);
         
 }
 
 /* Copies the value of one segment into segment zero */
-static inline void copy_segment(UArray_T copied_segment, UArray_T segment_zero)
+static UArray_T copy_segment(UArray_T copied_segment, UArray_T segment_zero)
 {
-        int i;
-	int length = UArray_length(copied_segment);
-        for ( i = 0; i < length; i++ ) {
-                word *duplicate_value = (word *)UArray_at(segment_zero, i);
-                *duplicate_value = *((word*)UArray_at(copied_segment, i));
-        }
+       int i;
+       int segment_length = UArray_length(copied_segment);
+       segment_zero = UArray_new(segment_length, UArray_size(copied_segment));
+       for ( i = 0; i < segment_length; i++ ) {
+	word value = *((word*)UArray_at(copied_segment, i));
+	word *duplicate_value = (word *)UArray_at(segment_zero, i);
+	*duplicate_value = value;
+	}
+
+  return segment_zero;
        
 }
 
-/* If you love it, set it free 
+/* If you love it, set it free */
 extern void free_memory(Memory mem) {
         
 
@@ -249,4 +260,4 @@ extern void free_memory(Memory mem) {
         
         free(mem);
 }
-*/
+

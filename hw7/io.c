@@ -30,7 +30,7 @@ extern void input(unsigned rc, UArray_T registers)
         }
         
         uint32_t *store_value  = UArray_at(registers, rc);
-        *(uint32_t)UArray_at(registers, rc) = input_value;
+        *store_value = input_value;
 }
 
 /* 
